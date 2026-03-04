@@ -955,6 +955,34 @@ export default function Home() {
   }, [sidebarState, toggleSidebar])
 
   useLayoutEffect(() => {
+    const updateViewportHeight = () => {
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight
+      document.documentElement.style.setProperty('--app-viewport-height', `${viewportHeight}px`)
+    }
+
+    const visualViewport = window.visualViewport
+    updateViewportHeight()
+    const rafId = window.requestAnimationFrame(updateViewportHeight)
+    const timeoutId = window.setTimeout(updateViewportHeight, 300)
+
+    window.addEventListener('resize', updateViewportHeight)
+    window.addEventListener('orientationchange', updateViewportHeight)
+    window.addEventListener('pageshow', updateViewportHeight)
+    visualViewport?.addEventListener('resize', updateViewportHeight)
+    visualViewport?.addEventListener('scroll', updateViewportHeight)
+
+    return () => {
+      window.cancelAnimationFrame(rafId)
+      window.clearTimeout(timeoutId)
+      window.removeEventListener('resize', updateViewportHeight)
+      window.removeEventListener('orientationchange', updateViewportHeight)
+      window.removeEventListener('pageshow', updateViewportHeight)
+      visualViewport?.removeEventListener('resize', updateViewportHeight)
+      visualViewport?.removeEventListener('scroll', updateViewportHeight)
+    }
+  }, [])
+
+  useLayoutEffect(() => {
     const { lang, update } = useSettingStore.getState()
     if (lang === '') {
       const browserLang = detectLanguage()
@@ -969,7 +997,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="mx-auto flex h-screen max-h-[-webkit-fill-available] w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md">
+    <main className="mx-auto app-viewport-height flex w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md">
       <div className="flex w-full justify-between px-4 pb-2 pr-2 pt-10 max-md:pt-4 max-sm:pr-2 max-sm:pt-4">
         <div className="flex items-center text-red-400">
           <div>

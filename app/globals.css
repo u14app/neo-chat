@@ -118,6 +118,12 @@ body {
   }
 }
 
+/* Use runtime viewport height when available to avoid mobile browser UI glitches. */
+.app-viewport-height {
+  height: var(--app-viewport-height, 100dvh);
+  min-height: var(--app-viewport-height, 100dvh);
+}
+
 @supports (-webkit-touch-callout: none) and (not (height: 100dvh)) {
   html,
   body {
