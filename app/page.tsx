@@ -37,7 +37,7 @@ import type { FileManagerOptions } from '@/utils/FileManager'
 import { fileUpload, imageUpload } from '@/utils/upload'
 import { findOperationById } from '@/utils/plugin'
 import { generateImages, type ImageGenerationRequest } from '@/utils/generateImages'
-import { detectLanguage, formatTime, readFileAsDataURL, base64ToBlob, isOfficeFile } from '@/utils/common'
+import { formatTime, readFileAsDataURL, base64ToBlob, isOfficeFile } from '@/utils/common'
 import { cn } from '@/utils'
 import { GEMINI_API_BASE_URL } from '@/constant/urls'
 import { OldVisionModel, OldTextModel } from '@/constant/model'
@@ -93,6 +93,8 @@ export default function Home() {
   const files = useAttachmentStore((state) => state.files)
   const references = useMessageStore((state) => state.references)
   const model = useSettingStore((state) => state.model)
+  const envLoaded = useEnvStore((state) => state.loaded)
+  const localeFromIp = useEnvStore((state) => state.localeFromIp)
   const [textareaHeight, setTextareaHeight] = useState<number>(TEXTAREA_DEFAULT_HEIGHT)
   const [content, setContent] = useState<string>('')
   const [message, setMessage] = useState<string>('')
@@ -983,18 +985,19 @@ export default function Home() {
   }, [])
 
   useLayoutEffect(() => {
+    if (!envLoaded) return
     const { lang, update } = useSettingStore.getState()
     if (lang === '') {
-      const browserLang = detectLanguage()
-      i18n.changeLanguage(browserLang)
-      const payload: Partial<Setting> = { lang: browserLang, sttLang: browserLang, ttsLang: browserLang }
-      const options = new EdgeSpeech({ locale: browserLang }).voiceOptions
+      const langFromIp = localeFromIp || 'en-US'
+      i18n.changeLanguage(langFromIp)
+      const payload: Partial<Setting> = { lang: langFromIp, sttLang: langFromIp, ttsLang: langFromIp }
+      const options = new EdgeSpeech({ locale: langFromIp }).voiceOptions
       if (options) {
         payload.ttsVoice = options[0].value
       }
       update(payload)
     }
-  }, [])
+  }, [envLoaded, localeFromIp])
 
   return (
     <main className="mx-auto app-viewport-height flex w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md">
