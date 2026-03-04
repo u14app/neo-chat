@@ -8,6 +8,7 @@ function I18Provider({ children }: { children: React.ReactNode }) {
   const { lang } = useSettingStore()
 
   useLayoutEffect(() => {
+    if (!lang) return
     i18n.changeLanguage(lang)
   }, [lang])
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
