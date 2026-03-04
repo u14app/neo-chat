@@ -957,28 +957,44 @@ export default function Home() {
   }, [sidebarState, toggleSidebar])
 
   useLayoutEffect(() => {
+    let previousHeight = 0
     const updateViewportHeight = () => {
-      const viewportHeight = window.visualViewport?.height ?? window.innerHeight
-      document.documentElement.style.setProperty('--app-viewport-height', `${viewportHeight}px`)
+      const viewportHeight = Math.round(window.visualViewport?.height ?? window.innerHeight)
+      if (viewportHeight > 0 && viewportHeight !== previousHeight) {
+        previousHeight = viewportHeight
+        document.documentElement.style.setProperty('--app-viewport-height', `${viewportHeight}px`)
+      }
     }
 
     const visualViewport = window.visualViewport
     updateViewportHeight()
     const rafId = window.requestAnimationFrame(updateViewportHeight)
     const timeoutId = window.setTimeout(updateViewportHeight, 300)
+    const intervalId = window.setInterval(updateViewportHeight, 500)
 
     window.addEventListener('resize', updateViewportHeight)
     window.addEventListener('orientationchange', updateViewportHeight)
     window.addEventListener('pageshow', updateViewportHeight)
+    window.addEventListener('scroll', updateViewportHeight, true)
+    window.addEventListener('focus', updateViewportHeight, true)
+    window.addEventListener('blur', updateViewportHeight, true)
+    window.addEventListener('touchend', updateViewportHeight)
+    document.addEventListener('visibilitychange', updateViewportHeight)
     visualViewport?.addEventListener('resize', updateViewportHeight)
     visualViewport?.addEventListener('scroll', updateViewportHeight)
 
     return () => {
       window.cancelAnimationFrame(rafId)
       window.clearTimeout(timeoutId)
+      window.clearInterval(intervalId)
       window.removeEventListener('resize', updateViewportHeight)
       window.removeEventListener('orientationchange', updateViewportHeight)
       window.removeEventListener('pageshow', updateViewportHeight)
+      window.removeEventListener('scroll', updateViewportHeight, true)
+      window.removeEventListener('focus', updateViewportHeight, true)
+      window.removeEventListener('blur', updateViewportHeight, true)
+      window.removeEventListener('touchend', updateViewportHeight)
+      document.removeEventListener('visibilitychange', updateViewportHeight)
       visualViewport?.removeEventListener('resize', updateViewportHeight)
       visualViewport?.removeEventListener('scroll', updateViewportHeight)
     }
