@@ -96,6 +96,39 @@
 html,
 body {
   height: 100%;
+  min-height: 100%;
+}
+
+.app-viewport-height {
+  height: 100vh;
+  min-height: 100vh;
+}
+
+@supports (height: 100svh) {
+  .app-viewport-height {
+    height: 100svh;
+    min-height: 100svh;
+  }
+}
+
+@supports (height: 100dvh) {
+  .app-viewport-height {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+}
+
+@supports (-webkit-touch-callout: none) and (not (height: 100dvh)) {
+  html,
+  body {
+    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
+  }
+
+  .app-viewport-height {
+    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
+  }
 }
 .inline-image {
   max-height: 200px;
