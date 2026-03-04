@@ -1016,7 +1016,7 @@ export default function Home() {
   }, [envLoaded, localeFromIp])
 
   return (
-    <main className="mx-auto app-viewport-height flex w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md">
+    <main className="mx-auto app-viewport-height flex w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md max-sm:fixed max-sm:inset-0 max-sm:mx-0">
       <div className="flex w-full justify-between px-4 pb-2 pr-2 pt-10 max-md:pt-4 max-sm:pr-2 max-sm:pt-4">
         <div className="flex items-center text-red-400">
           <div>
