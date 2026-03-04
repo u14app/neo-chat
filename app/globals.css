@@ -126,18 +126,6 @@ body {
   min-height: var(--app-viewport-height, 100dvh);
 }
 
-@supports (-webkit-touch-callout: none) and (not (height: 100dvh)) {
-  html,
-  body {
-    height: -webkit-fill-available;
-    min-height: -webkit-fill-available;
-  }
-
-  .app-viewport-height {
-    height: -webkit-fill-available;
-    min-height: -webkit-fill-available;
-  }
-}
 .inline-image {
   max-height: 200px;
   border-radius: 4px;

@@ -957,6 +957,13 @@ export default function Home() {
   }, [sidebarState, toggleSidebar])
 
   useLayoutEffect(() => {
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    if (isIOS) {
+      document.documentElement.style.removeProperty('--app-viewport-height')
+      return
+    }
+
     let previousHeight = 0
     const updateViewportHeight = () => {
       const viewportHeight = Math.round(window.visualViewport?.height ?? window.innerHeight)
@@ -1016,7 +1023,7 @@ export default function Home() {
   }, [envLoaded, localeFromIp])
 
   return (
-    <main className="mx-auto app-viewport-height flex w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md max-sm:fixed max-sm:inset-0 max-sm:mx-0">
+    <main className="mx-auto app-viewport-height flex w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md">
       <div className="flex w-full justify-between px-4 pb-2 pr-2 pt-10 max-md:pt-4 max-sm:pr-2 max-sm:pt-4">
         <div className="flex items-center text-red-400">
           <div>
