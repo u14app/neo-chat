@@ -96,7 +96,36 @@
 html,
 body {
   height: 100%;
+  min-height: 100%;
+  height: var(--app-viewport-height, 100%);
+  min-height: var(--app-viewport-height, 100%);
 }
+
+.app-viewport-height {
+  height: 100vh;
+  min-height: 100vh;
+}
+
+@supports (height: 100svh) {
+  .app-viewport-height {
+    height: 100svh;
+    min-height: 100svh;
+  }
+}
+
+@supports (height: 100dvh) {
+  .app-viewport-height {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+}
+
+/* Use runtime viewport height when available to avoid mobile browser UI glitches. */
+.app-viewport-height {
+  height: var(--app-viewport-height, 100dvh);
+  min-height: var(--app-viewport-height, 100dvh);
+}
+
 .inline-image {
   max-height: 200px;
   border-radius: 4px;

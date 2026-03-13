@@ -3,6 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useSettingStore, useEnvStore } from '@/store/setting'
 import { useModelStore } from '@/store/model'
 import { fetchModels } from '@/utils/models'
+import { parseModelList } from '@/utils/modelList'
 import { getRandomKey } from '@/utils/common'
 import { Model } from '@/constant/model'
 import { values, keys, find } from 'lodash-es'
@@ -34,28 +35,10 @@ function ModelSelect({ className, defaultModel }: Props) {
       })
     }
 
-    let modelList: string[] = []
     const defaultModelList: string[] = keys(Model)
-    const userModels: string[] = MODEL_LIST ? MODEL_LIST.split(',') : []
+    const parsedModelList = parseModelList(MODEL_LIST, defaultModelList)
 
-    userModels.forEach((modelName) => {
-      for (const name of defaultModelList) {
-        if (!modelList.includes(name)) modelList.push(name)
-      }
-      if (modelName === 'all' || modelName === '+all') {
-      } else if (modelName === '-all') {
-        modelList = modelList.filter((name) => !defaultModelList.includes(name))
-      } else if (modelName.startsWith('-')) {
-        modelList = modelList.filter((name) => name !== modelName.substring(1))
-      } else if (modelName.startsWith('@')) {
-        const name = modelName.substring(1)
-        if (!modelList.includes(name)) modelList.push(name)
-      } else {
-        modelList.push(modelName.startsWith('+') ? modelName.substring(1) : modelName)
-      }
-    })
-
-    return modelList.length > 0 ? modelList : defaultModelList
+    return parsedModelList.models
   }, [models, MODEL_LIST])
 
   const handleModelChange = useCallback(

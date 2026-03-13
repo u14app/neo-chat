@@ -14,7 +14,10 @@ interface EnvStore {
   uploadLimit: number
   buildMode: string
   isProtected: boolean
-  update: (values: Record<string, string | number | boolean>) => void
+  countryCode: string
+  localeFromIp: string
+  loaded: boolean
+  update: (values: Partial<Omit<EnvStore, 'update'>>) => void
 }
 
 const defaultSetting: DefaultSetting = {
@@ -78,5 +81,8 @@ export const useEnvStore = create<EnvStore>((set) => ({
   uploadLimit: 0,
   buildMode: '',
   isProtected: true,
-  update: (values) => set(values),
+  countryCode: '',
+  localeFromIp: 'en-US',
+  loaded: false,
+  update: (values) => set((state) => ({ ...state, ...values })),
 }))

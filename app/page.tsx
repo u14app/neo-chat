@@ -37,7 +37,7 @@ import type { FileManagerOptions } from '@/utils/FileManager'
 import { fileUpload, imageUpload } from '@/utils/upload'
 import { findOperationById } from '@/utils/plugin'
 import { generateImages, type ImageGenerationRequest } from '@/utils/generateImages'
-import { detectLanguage, formatTime, readFileAsDataURL, base64ToBlob, isOfficeFile } from '@/utils/common'
+import { formatTime, readFileAsDataURL, base64ToBlob, isOfficeFile } from '@/utils/common'
 import { cn } from '@/utils'
 import { GEMINI_API_BASE_URL } from '@/constant/urls'
 import { OldVisionModel, OldTextModel } from '@/constant/model'
@@ -93,6 +93,8 @@ export default function Home() {
   const files = useAttachmentStore((state) => state.files)
   const references = useMessageStore((state) => state.references)
   const model = useSettingStore((state) => state.model)
+  const envLoaded = useEnvStore((state) => state.loaded)
+  const localeFromIp = useEnvStore((state) => state.localeFromIp)
   const [textareaHeight, setTextareaHeight] = useState<number>(TEXTAREA_DEFAULT_HEIGHT)
   const [content, setContent] = useState<string>('')
   const [message, setMessage] = useState<string>('')
@@ -955,21 +957,73 @@ export default function Home() {
   }, [sidebarState, toggleSidebar])
 
   useLayoutEffect(() => {
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    if (isIOS) {
+      document.documentElement.style.removeProperty('--app-viewport-height')
+      return
+    }
+
+    let previousHeight = 0
+    const updateViewportHeight = () => {
+      const viewportHeight = Math.round(window.visualViewport?.height ?? window.innerHeight)
+      if (viewportHeight > 0 && viewportHeight !== previousHeight) {
+        previousHeight = viewportHeight
+        document.documentElement.style.setProperty('--app-viewport-height', `${viewportHeight}px`)
+      }
+    }
+
+    const visualViewport = window.visualViewport
+    updateViewportHeight()
+    const rafId = window.requestAnimationFrame(updateViewportHeight)
+    const timeoutId = window.setTimeout(updateViewportHeight, 300)
+    const intervalId = window.setInterval(updateViewportHeight, 500)
+
+    window.addEventListener('resize', updateViewportHeight)
+    window.addEventListener('orientationchange', updateViewportHeight)
+    window.addEventListener('pageshow', updateViewportHeight)
+    window.addEventListener('scroll', updateViewportHeight, true)
+    window.addEventListener('focus', updateViewportHeight, true)
+    window.addEventListener('blur', updateViewportHeight, true)
+    window.addEventListener('touchend', updateViewportHeight)
+    document.addEventListener('visibilitychange', updateViewportHeight)
+    visualViewport?.addEventListener('resize', updateViewportHeight)
+    visualViewport?.addEventListener('scroll', updateViewportHeight)
+
+    return () => {
+      window.cancelAnimationFrame(rafId)
+      window.clearTimeout(timeoutId)
+      window.clearInterval(intervalId)
+      window.removeEventListener('resize', updateViewportHeight)
+      window.removeEventListener('orientationchange', updateViewportHeight)
+      window.removeEventListener('pageshow', updateViewportHeight)
+      window.removeEventListener('scroll', updateViewportHeight, true)
+      window.removeEventListener('focus', updateViewportHeight, true)
+      window.removeEventListener('blur', updateViewportHeight, true)
+      window.removeEventListener('touchend', updateViewportHeight)
+      document.removeEventListener('visibilitychange', updateViewportHeight)
+      visualViewport?.removeEventListener('resize', updateViewportHeight)
+      visualViewport?.removeEventListener('scroll', updateViewportHeight)
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    if (!envLoaded) return
     const { lang, update } = useSettingStore.getState()
     if (lang === '') {
-      const browserLang = detectLanguage()
-      i18n.changeLanguage(browserLang)
-      const payload: Partial<Setting> = { lang: browserLang, sttLang: browserLang, ttsLang: browserLang }
-      const options = new EdgeSpeech({ locale: browserLang }).voiceOptions
+      const langFromIp = localeFromIp || 'en-US'
+      i18n.changeLanguage(langFromIp)
+      const payload: Partial<Setting> = { lang: langFromIp, sttLang: langFromIp, ttsLang: langFromIp }
+      const options = new EdgeSpeech({ locale: langFromIp }).voiceOptions
       if (options) {
         payload.ttsVoice = options[0].value
       }
       update(payload)
     }
-  }, [])
+  }, [envLoaded, localeFromIp])
 
   return (
-    <main className="mx-auto flex h-screen max-h-[-webkit-fill-available] w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md">
+    <main className="mx-auto app-viewport-height flex w-full max-w-screen-lg flex-col justify-between overflow-hidden max-lg:max-w-screen-md">
       <div className="flex w-full justify-between px-4 pb-2 pr-2 pt-10 max-md:pt-4 max-sm:pr-2 max-sm:pt-4">
         <div className="flex items-center text-red-400">
           <div>

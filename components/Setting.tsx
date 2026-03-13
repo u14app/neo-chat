@@ -20,6 +20,7 @@ import Button from '@/components/Button'
 import ResponsiveDialog from '@/components/ResponsiveDialog'
 import i18n from '@/utils/i18n'
 import { fetchModels } from '@/utils/models'
+import { parseModelList } from '@/utils/modelList'
 import { getRandomKey } from '@/utils/common'
 import locales from '@/constant/locales'
 import { Model, DefaultModel } from '@/constant/model'
@@ -85,35 +86,18 @@ function Setting({ open, hiddenTalkPanel, onClose }: SettingProps) {
       })
     }
 
-    let modelList: string[] = []
-    let defaultModel = DefaultModel
     const defaultModelList: string[] = keys(Model)
-    const userModels: string[] = MODEL_LIST ? MODEL_LIST.split(',') : []
+    const parsedModelList = parseModelList(MODEL_LIST, defaultModelList)
+    const models = parsedModelList.models
 
-    userModels.forEach((modelName) => {
-      for (const name of defaultModelList) {
-        if (!modelList.includes(name)) modelList.push(name)
-      }
-      if (modelName === 'all' || modelName === '+all') {
-      } else if (modelName === '-all') {
-        modelList = modelList.filter((name) => !defaultModelList.includes(name))
-      } else if (modelName.startsWith('-')) {
-        modelList = modelList.filter((name) => name !== modelName.substring(1))
-      } else if (modelName.startsWith('@')) {
-        const name = modelName.substring(1)
-        if (!modelList.includes(name)) modelList.push(name)
-        if (model === '') {
-          update({ model: name })
-          defaultModel = name
-        }
-      } else {
-        modelList.push(modelName.startsWith('+') ? modelName.substring(1) : modelName)
-      }
-    })
-
-    const models = modelList.length > 0 ? modelList : defaultModelList
-    if (models.length > 0 && !models.includes(defaultModel)) {
-      update({ model: models[0] })
+    if (parsedModelList.defaultModel && model === DefaultModel && models.includes(parsedModelList.defaultModel)) {
+      update({ model: parsedModelList.defaultModel })
+    } else if (models.length > 0 && !models.includes(model)) {
+      const fallbackModel =
+        parsedModelList.defaultModel && models.includes(parsedModelList.defaultModel)
+          ? parsedModelList.defaultModel
+          : models[0]
+      update({ model: fallbackModel })
     }
 
     return models

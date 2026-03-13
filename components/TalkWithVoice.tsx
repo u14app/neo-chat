@@ -76,7 +76,7 @@ function TalkWithVoice({
 
   return (
     <div>
-      <div className="fixed left-0 right-0 top-0 z-50 flex h-full w-screen flex-col items-center justify-center bg-slate-900">
+      <div className="fixed left-0 right-0 top-0 z-50 flex app-viewport-height w-screen flex-col items-center justify-center bg-slate-900">
         <div className="h-1/5 w-full" ref={siriWaveRef}></div>
         <div className="absolute bottom-0 flex h-2/5 w-2/3 flex-col justify-between pb-12 text-center">
           <div className="text-sm leading-6">

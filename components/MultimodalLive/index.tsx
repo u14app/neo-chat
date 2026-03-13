@@ -298,7 +298,7 @@ function MultimodalLive({ onClose }: Props) {
   }, [])
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-50 flex h-full w-screen flex-col bg-slate-900">
+    <div className="fixed left-0 right-0 top-0 z-50 flex app-viewport-height w-screen flex-col bg-slate-900">
       <div className="items-top relative h-full w-full justify-center">
         <div className={cn('mx-auto h-full w-full max-w-screen-sm', { hidden: connected })}>
           <SystemInstruction className="relative top-1/2 mx-4 -translate-y-1/2" maxHeight="300px" closeable={false} />
