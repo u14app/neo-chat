@@ -32,7 +32,7 @@
     "next-intl": "^4.13.0",
     "openai": "^6.15.0",
     "opfs-tools": "^0.7.4",
-    "react": "^19.2.3",
+    "react": "^19.2.7",
     "react-dom": "^19.2.3",
     "react-markdown": "^10.1.0",
     "react-zoom-pan-pinch": "^3.7.0",
