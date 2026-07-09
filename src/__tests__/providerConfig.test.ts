@@ -63,6 +63,28 @@ describe("provider config normalization", () => {
     ).toBe("OpenAI Compatible");
   });
 
+  it("accepts LiteLLM as a valid provider type", () => {
+    const provider = normalizeModelProvider({
+      id: "LITELLM",
+      name: "LiteLLM Proxy",
+      type: "LiteLLM",
+      baseUrl: "http://localhost:4000",
+      apiKey: "sk-litellm-key",
+      models: ["gpt-4o", "claude-sonnet-4-20250514"],
+      modelsList: ["gpt-4o", "claude-sonnet-4-20250514"],
+    });
+
+    expect(provider).toMatchObject({
+      id: "LITELLM",
+      name: "LiteLLM Proxy",
+      type: "LiteLLM",
+      baseUrl: "http://localhost:4000",
+      apiKey: "sk-litellm-key",
+      models: ["gpt-4o", "claude-sonnet-4-20250514"],
+      modelsList: ["gpt-4o", "claude-sonnet-4-20250514"],
+    });
+  });
+
   it("defaults unknown provider types to OpenAI Compatible", () => {
     expect(
       normalizeModelProvider({

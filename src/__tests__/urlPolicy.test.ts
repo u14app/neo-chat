@@ -38,6 +38,36 @@ describe("url policy and provider runtime helpers", () => {
     ).toBe("https://compat.example.com/v1");
   });
 
+  it("returns default LiteLLM base URL when no URL is provided", () => {
+    expect(normalizeProviderBaseUrl(undefined, "LiteLLM")).toBe(
+      "http://localhost:4000/v1",
+    );
+    expect(normalizeProviderBaseUrl("default", "LiteLLM")).toBe(
+      "http://localhost:4000/v1",
+    );
+  });
+
+  it("preserves /v1 suffix on custom LiteLLM base URLs", () => {
+    expect(
+      normalizeProviderBaseUrl("https://litellm.example.com/v1", "LiteLLM"),
+    ).toBe("https://litellm.example.com/v1");
+  });
+
+  it("appends /v1 to custom LiteLLM base URLs without it", () => {
+    expect(
+      normalizeProviderBaseUrl("https://litellm.example.com", "LiteLLM"),
+    ).toBe("https://litellm.example.com/v1");
+  });
+
+  it("returns LiteLLM models URL under /v1/models", () => {
+    expect(getProviderModelsUrl(undefined, "LiteLLM")).toBe(
+      "http://localhost:4000/v1/models",
+    );
+    expect(getProviderModelsUrl("https://litellm.example.com", "LiteLLM")).toBe(
+      "https://litellm.example.com/v1/models",
+    );
+  });
+
   it("keeps Gemini SDK base URL at the service root", () => {
     expect(
       normalizeProviderBaseUrl(
