@@ -67,7 +67,7 @@ export class ProviderFactory {
    */
   static createOpenAIClient(provider: ProviderConfig): OpenAI {
     const apiKey = this.validateApiKey(provider);
-    const baseURL = this.getEffectiveBaseUrl(provider.baseUrl, "OpenAI");
+    const baseURL = this.getEffectiveBaseUrl(provider.baseUrl, provider.type);
     if (baseURL) {
       validateOutboundUrl(baseURL, getSafeUrlPolicy("provider"));
     }
