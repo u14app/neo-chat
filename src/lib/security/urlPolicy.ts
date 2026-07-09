@@ -51,12 +51,14 @@ export interface ProviderRuntimeConfig {
 
 const DEFAULT_OPENAI_BASE_URL = "https://api.openai.com/v1";
 const DEFAULT_GEMINI_BASE_URL = "https://generativelanguage.googleapis.com";
+const DEFAULT_LITELLM_BASE_URL = "http://localhost:4000/v1";
 
 export function normalizeProviderBaseUrl(
   baseUrl: string | undefined,
   providerType: ProviderRuntimeConfig["type"] | string,
 ): string {
   if (!baseUrl || baseUrl === "default") {
+    if (providerType === "LiteLLM") return DEFAULT_LITELLM_BASE_URL;
     return isOpenAIProviderType(providerType)
       ? DEFAULT_OPENAI_BASE_URL
       : DEFAULT_GEMINI_BASE_URL;

@@ -117,6 +117,10 @@ const ProviderSettings = () => {
       label: t("openaiResponses"),
     },
     {
+      value: "LiteLLM",
+      label: "LiteLLM",
+    },
+    {
       value: "Gemini",
       label: "Gemini",
     },
