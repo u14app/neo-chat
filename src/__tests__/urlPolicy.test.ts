@@ -63,9 +63,9 @@ describe("url policy and provider runtime helpers", () => {
     expect(getProviderModelsUrl(undefined, "LiteLLM")).toBe(
       "http://localhost:4000/v1/models",
     );
-    expect(
-      getProviderModelsUrl("https://litellm.example.com", "LiteLLM"),
-    ).toBe("https://litellm.example.com/v1/models");
+    expect(getProviderModelsUrl("https://litellm.example.com", "LiteLLM")).toBe(
+      "https://litellm.example.com/v1/models",
+    );
   });
 
   it("keeps Gemini SDK base URL at the service root", () => {
