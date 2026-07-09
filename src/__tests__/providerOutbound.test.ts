@@ -62,4 +62,46 @@ describe("provider outbound policy", () => {
       }),
     ).not.toThrow();
   });
+
+  it("creates an OpenAI-compatible client for LiteLLM with a custom base URL", async () => {
+    const { ProviderFactory } = await import("../lib/providers/base");
+
+    expect(() =>
+      ProviderFactory.createOpenAIClient({
+        type: "LiteLLM",
+        baseUrl: "https://litellm.example.com/v1",
+        apiKey: "sk-litellm-key",
+      }),
+    ).not.toThrow();
+  });
+
+  it("blocks LiteLLM default localhost URL in hosted mode", async () => {
+    vi.stubEnv("DEPLOYMENT_MODE", "hosted");
+    lookupMock.mockResolvedValue([{ address: "127.0.0.1", family: 4 }]);
+
+    const { ProviderFactory } = await import("../lib/providers/base");
+
+    await expect(
+      ProviderFactory.assertProviderOutboundAllowed({
+        type: "LiteLLM",
+        baseUrl: "http://localhost:4000/v1",
+        apiKey: "sk-litellm-key",
+      }),
+    ).rejects.toMatchObject({
+      code: "HOSTED_PROXY_BLOCKED",
+    });
+  });
+
+  it("allows LiteLLM with a public base URL in hosted mode", async () => {
+    vi.stubEnv("DEPLOYMENT_MODE", "hosted");
+    const { ProviderFactory } = await import("../lib/providers/base");
+
+    expect(() =>
+      ProviderFactory.createOpenAIClient({
+        type: "LiteLLM",
+        baseUrl: "https://litellm.example.com/v1",
+        apiKey: "sk-litellm-key",
+      }),
+    ).not.toThrow();
+  });
 });
