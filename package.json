@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",
-    "@google/genai": "^2.10.0",
+    "@google/genai": "^2.11.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@radix-ui/react-dropdown-menu": "^2.1.20",
     "@xiangfa/mindmap": "^0.7.1",
