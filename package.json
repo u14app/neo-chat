@@ -70,7 +70,7 @@
     "eslint-config-next": "^16.2.10",
     "jsdom": "^29.1.1",
     "prettier": "^3.9.4",
-    "tailwindcss": "^4.3.2",
+    "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10",
     "wrangler": "^4.110.0"
