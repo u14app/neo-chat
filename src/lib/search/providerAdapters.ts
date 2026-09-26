@@ -399,5 +399,49 @@ export async function runSearchProvider({
     };
   }
 
+  if (provider === "you") {
+    const youHeaders: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (apiKey) {
+      youHeaders["X-API-Key"] = apiKey;
+    }
+
+    const endpoint = new URL(
+      "/api/search",
+      baseUrl || "https://api.you.com",
+    ).toString();
+
+    const searchParams = new URLSearchParams({ q: query });
+    const { response, data } = await fetchJson<any>(
+      `${endpoint}?${searchParams.toString()}`,
+      {
+        method: "GET",
+        headers: youHeaders,
+        signal,
+      },
+      fetchOptions,
+    );
+
+    assertSearchResponseOk(response, "You.com search failed");
+
+    // You.com returns results in `results` (search) or `hits` (news/newsletter) arrays.
+    // Each hit has title, url, snippet (or description), and optional images.
+    const hits = data.results || data.hits || [];
+    const images: ImageSource[] = [];
+
+    return {
+      sources: hits
+        .filter((item: any) => (item.snippet || item.description) && item.url)
+        .map((result: any) => ({
+          title: result.title || "",
+          content: result.snippet || result.description || "",
+          url: result.url,
+        })),
+      images,
+    };
+  }
+
   return { sources: [], images: [] };
 }

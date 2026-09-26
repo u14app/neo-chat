@@ -27,6 +27,7 @@ const CONFIGURABLE_SEARCH_PROVIDERS = [
   "exa",
   "bocha",
   "searxng",
+  "you",
 ] as const satisfies readonly Exclude<SearchProviderID, "default" | "google">[];
 
 const DEFAULT_SEARCH_RESULTS_LIMIT = 5;
@@ -145,6 +146,8 @@ export const getSearchProviderLabel = (provider: SearchProviderID): string => {
       return "Bocha";
     case "searxng":
       return "SearXNG";
+    case "you":
+      return "You.com";
   }
 };
 

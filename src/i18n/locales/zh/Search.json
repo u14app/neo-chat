@@ -5,6 +5,7 @@
   "modelBuiltIn": "模型内置",
   "modelBuiltInDesc": "使用当前模型的内置搜索：Google 模型使用 Google Search，OpenAI Responses 模型使用 OpenAI Web Search。OpenAI 兼容和 Anthropic 模型应选择外部搜索服务。",
   "searxngDesc": "自托管、注重隐私的元搜索引擎",
+  "youDesc": "提供最新搜索结果和带引用的回答的网络搜索API。",
   "capabilityModel": "已就绪：当前模型可以使用 {provider} 内置搜索。",
   "capabilityServer": "已就绪：服务端默认搜索服务可用。",
   "capabilityClient": "已就绪：已保存 {provider} 凭据。",
