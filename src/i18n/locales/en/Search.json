@@ -5,6 +5,7 @@
   "modelBuiltIn": "Model Built-in",
   "modelBuiltInDesc": "Use the active model's built-in search: Google Search for Google models, OpenAI Web Search for OpenAI Responses models. OpenAI-compatible and Anthropic models should use an external search provider.",
   "searxngDesc": "Self-hosted privacy-respecting metasearch engine",
+  "youDesc": "Web search API with fresh results and cited answers.",
   "capabilityModel": "Ready: the selected model can use {provider} built-in search.",
   "capabilityServer": "Ready: the server default search service is available.",
   "capabilityClient": "Ready: a saved {provider} credential is available.",

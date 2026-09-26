@@ -18,10 +18,12 @@ const FIRECRAWL_BASE_URL = "https://api.firecrawl.dev";
 const EXA_BASE_URL = "https://api.exa.ai";
 const BOCHA_BASE_URL = "https://api.bochaai.com";
 const SEARXNG_BASE_URL = "http://localhost:8080";
+const YOU_BASE_URL = "https://api.you.com";
 const TAVILY_KEY_URL = "https://app.tavily.com/";
 const EXA_KEY_URL = "https://dashboard.exa.ai/api-keys";
 const FIRECRAWL_KEY_URL = "https://www.firecrawl.dev/app";
 const BOCHA_KEY_URL = "https://open.bochaai.com/";
+const YOU_KEY_URL = "https://you.com/platform/api-keys";
 
 const SearchSettings = () => {
   const t = useTranslations("Search");
@@ -177,6 +179,20 @@ const SearchSettings = () => {
             config={search.configs["searxng"]}
             onUpdateConfig={(c) => updateSearchConfig("searxng", c)}
             baseUrlMaxLength={SEARCH_CONFIG_LIMITS.maxBaseUrlChars}
+          />
+          <SearchProviderItem
+            id="you"
+            name="You.com"
+            icon={<Globe size={18} />}
+            description={t("youDesc")}
+            isActive={search.provider === "you"}
+            onActivate={() => setSearchProvider("you")}
+            defaultBaseUrl={YOU_BASE_URL}
+            config={search.configs["you"]}
+            onUpdateConfig={(c) => updateSearchConfig("you", c)}
+            apiKeyMaxLength={SEARCH_CONFIG_LIMITS.maxApiKeyChars}
+            baseUrlMaxLength={SEARCH_CONFIG_LIMITS.maxBaseUrlChars}
+            apiKeyHelpUrl={YOU_KEY_URL}
           />
         </div>
       </div>
