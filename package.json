@@ -27,7 +27,7 @@
     "byok:generate": "node scripts/generate-byok-key.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.111.0",
+    "@anthropic-ai/sdk": "^0.128.0",
     "@automerge/automerge": "^3.3.2",
     "@cfworker/json-schema": "^4.1.1",
     "@datafe-open/markdown-chart": "0.1.16",
