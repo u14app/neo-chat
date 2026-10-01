@@ -58,7 +58,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-markdown": "^10.1.0",
-    "react-zoom-pan-pinch": "^4.0.3",
+    "react-zoom-pan-pinch": "^4.2.0",
     "rehype-highlight": "^7.0.2",
     "rehype-katex": "^7.0.1",
     "rehype-raw": "^7.0.0",

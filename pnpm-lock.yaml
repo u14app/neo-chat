@@ -134,8 +134,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0(@types/react@19.2.17)(react@19.2.7)
       react-zoom-pan-pinch:
-        specifier: ^4.0.3
-        version: 4.0.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        specifier: ^4.2.0
+        version: 4.2.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       rehype-highlight:
         specifier: ^7.0.2
         version: 7.0.2
@@ -5187,8 +5187,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-zoom-pan-pinch@4.0.3:
-    resolution: {integrity: sha512-N2Hi6L78fFmhRra+ORpFSW7WST5x6kxpOPplIvtB0b7b+U2anpo1z1wLgaWRPS2kUSqcraRG+JgBCIlDJnqqAg==}
+  react-zoom-pan-pinch@4.2.0:
+    resolution: {integrity: sha512-QSw1dvr6QGv5zHCUY7SEIY7EWRDbx1y6plylrWf2Nko9KOMW1MEoPC6oJ+Y/qOSeQjhvbkMV0m5bFF7pBxCH4A==}
     engines: {node: '>=8', npm: '>=5'}
     peerDependencies:
       react: '*'
@@ -11547,7 +11547,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.17
 
-  react-zoom-pan-pinch@4.0.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  react-zoom-pan-pinch@4.2.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
