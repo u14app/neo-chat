@@ -48,7 +48,7 @@
     "html-url-attributes": "^3.0.1",
     "katex": "^0.18.4",
     "localforage": "^1.10.0",
-    "lucide-react": "1.36.0",
+    "lucide-react": "1.48.0",
     "mermaid": "^11.17.2",
     "next": "^16.3.5",
     "next-intl": "^4.14.1",
