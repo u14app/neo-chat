@@ -122,6 +122,34 @@ const fetchSearchJson: SafeFetchJson = async <T>(
   }
 };
 
+export const YOUCOM_KEYLESS_SEARCH_URL = "https://api.you.com/v1/agents/search";
+export const YOUCOM_KEYED_SEARCH_URL = "https://ydc-index.io/v1/search";
+export const YOUCOM_USER_AGENT = "youdotcom-integration/u14app-neo-chat";
+
+const YOUCOM_FRESHNESS: Partial<Record<SearchTimeRange, string>> = {
+  day: "day",
+  week: "week",
+  month: "month",
+  year: "year",
+};
+
+function getYoucomFailureMessage(status: number, apiKey?: string): string {
+  if (status === 401 || status === 403) {
+    return apiKey
+      ? "You.com rejected the API key. Check the key in Search settings."
+      : "You.com keyless search is unavailable from this network. Add a You.com API key in Search settings.";
+  }
+  if (status === 402) {
+    return "You.com API credits are exhausted for this key.";
+  }
+  if (status === 429) {
+    return apiKey
+      ? "You.com rate limit reached. Try again later."
+      : "You.com keyless search limit reached (100 searches a day). Add a You.com API key in Search settings for more.";
+  }
+  return "You.com search failed";
+}
+
 const rewritingPrompt = `You are tasked with re-writing the following text to markdown. Ensure you do not change the meaning or story behind the text. 
 
 **Respond only the updated markdown text, and no additional text before or after.**`;
@@ -349,6 +377,80 @@ export async function runSearchProvider({
         };
       }),
     };
+  }
+
+  if (provider === "youcom") {
+    // Keyless by default: the public agents endpoint allows 100 searches a day
+    // per IP. A configured key switches to the keyed index endpoint.
+    const freshness = timeRange ? YOUCOM_FRESHNESS[timeRange] : undefined;
+    const count = Math.min(Math.max(maxResultNumber, 1), 20);
+    const youHeaders: Record<string, string> = {
+      Accept: "application/json",
+      "User-Agent": YOUCOM_USER_AGENT,
+    };
+    let endpoint: string;
+    let init: RequestInit;
+    if (apiKey) {
+      endpoint = YOUCOM_KEYED_SEARCH_URL;
+      init = {
+        method: "POST",
+        headers: {
+          ...youHeaders,
+          "Content-Type": "application/json",
+          "X-API-Key": apiKey,
+        },
+        body: JSON.stringify({
+          query,
+          count,
+          ...(freshness ? { freshness } : {}),
+        }),
+        signal,
+      };
+    } else {
+      const params = new URLSearchParams({ query, count: String(count) });
+      if (freshness) params.set("freshness", freshness);
+      endpoint = `${YOUCOM_KEYLESS_SEARCH_URL}?${params.toString()}`;
+      init = { method: "GET", headers: youHeaders, signal };
+    }
+
+    const { response, data } = await fetchJson<any>(
+      endpoint,
+      init,
+      fetchOptions,
+    );
+
+    assertSearchResponseOk(
+      response,
+      getYoucomFailureMessage(response.status, apiKey),
+    );
+    const web: any[] = Array.isArray(data?.results?.web)
+      ? data.results.web
+      : [];
+    const news: any[] = Array.isArray(data?.results?.news)
+      ? data.results.news
+      : [];
+    const images: ImageSource[] = [];
+    const sources = [...web, ...news]
+      .filter((item: any) => item?.url)
+      .map((item: any) => {
+        const snippets = Array.isArray(item.snippets)
+          ? item.snippets.filter((s: unknown) => typeof s === "string")
+          : [];
+        const content = [item.description, ...snippets]
+          .filter((part) => typeof part === "string" && part.trim())
+          .join("\n\n");
+        if (typeof item.thumbnail_url === "string" && item.thumbnail_url) {
+          images.push({
+            url: item.thumbnail_url,
+            description: item.title,
+            sourceUrl: item.url,
+          });
+        }
+        return { title: item.title || item.url, url: item.url, content };
+      })
+      .filter((source) => source.content)
+      .slice(0, maxResultNumber);
+    return { sources, images };
   }
 
   if (provider === "searxng") {

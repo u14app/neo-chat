@@ -26,7 +26,14 @@ export interface ImageSource {
 }
 
 export type SearchProviderID =
-  "default" | "google" | "tavily" | "firecrawl" | "exa" | "bocha" | "searxng";
+  | "default"
+  | "google"
+  | "tavily"
+  | "firecrawl"
+  | "exa"
+  | "bocha"
+  | "youcom"
+  | "searxng";
 
 export type SearchTimeRange = "any" | "day" | "week" | "month" | "year";
 

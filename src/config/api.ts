@@ -70,6 +70,7 @@ export const SEARCH_SERVICE_URLS = {
   firecrawl: "https://api.firecrawl.dev",
   exa: "https://api.exa.ai",
   bocha: "https://api.bochaai.com",
+  youcom: "https://api.you.com",
   searxng: "http://localhost:8080",
 } as const;
 

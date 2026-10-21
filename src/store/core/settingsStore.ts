@@ -674,6 +674,7 @@ export const useSettingsStore = create<SettingsState>()(
           firecrawl: { apiKey: "" },
           exa: { apiKey: "" },
           bocha: { apiKey: "" },
+          youcom: { apiKey: "" },
           searxng: { baseUrl: "http://localhost:8080" },
         },
       },

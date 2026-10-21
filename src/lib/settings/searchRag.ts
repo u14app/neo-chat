@@ -18,6 +18,7 @@ const SEARCH_PROVIDERS = [
   "firecrawl",
   "exa",
   "bocha",
+  "youcom",
   "searxng",
 ] as const satisfies readonly SearchProviderID[];
 
@@ -26,6 +27,7 @@ const CONFIGURABLE_SEARCH_PROVIDERS = [
   "firecrawl",
   "exa",
   "bocha",
+  "youcom",
   "searxng",
 ] as const satisfies readonly Exclude<SearchProviderID, "default" | "google">[];
 
@@ -143,6 +145,8 @@ export const getSearchProviderLabel = (provider: SearchProviderID): string => {
       return "Exa";
     case "bocha":
       return "Bocha";
+    case "youcom":
+      return "You.com";
     case "searxng":
       return "SearXNG";
   }
@@ -255,6 +259,18 @@ const resolveSearchCapability = ({
       };
     }
 
+    return {
+      enabled: true,
+      mode: "external",
+      provider: searchProvider,
+      source: hasSearchApiKey(searchConfig)
+        ? "client_api_key"
+        : "public_service",
+    };
+  }
+
+  if (searchProvider === "youcom") {
+    // You.com search works without a key (100 searches a day per IP).
     return {
       enabled: true,
       mode: "external",
@@ -405,6 +421,7 @@ export const normalizeSearchSettings = (
       )!,
       exa: normalizeSearchConfig("exa", rawSearch.configs?.exa)!,
       bocha: normalizeSearchConfig("bocha", rawSearch.configs?.bocha)!,
+      youcom: normalizeSearchConfig("youcom", rawSearch.configs?.youcom)!,
       searxng: normalizeSearchConfig("searxng", rawSearch.configs?.searxng)!,
     },
   };

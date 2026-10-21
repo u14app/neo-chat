@@ -277,3 +277,131 @@ describe("search provider adapters", () => {
     });
   });
 });
+
+describe("You.com search adapter", () => {
+  const youResponse = {
+    results: {
+      web: [
+        {
+          title: "Neo",
+          url: "https://example.com/neo",
+          description: "Neo description",
+          snippets: ["first snippet"],
+          thumbnail_url: "https://example.com/neo.png",
+        },
+        { title: "Empty", url: "https://example.com/empty" },
+      ],
+      news: [
+        {
+          title: "News",
+          url: "https://example.com/news",
+          description: "News description",
+        },
+      ],
+    },
+  };
+
+  it("uses the keyless endpoint without an API key", async () => {
+    const fetchJson = vi.fn().mockResolvedValue({
+      response: new Response(null, { status: 200 }),
+      data: youResponse,
+    });
+
+    const result = await runSearchProvider({
+      provider: "youcom",
+      query: "neo chat",
+      timeRange: "week",
+      maxResultNumber: 5,
+      fetchJson,
+    });
+
+    const [url, init] = fetchJson.mock.calls[0]!;
+    const parsed = new URL(url as string);
+    expect(parsed.origin + parsed.pathname).toBe(
+      "https://api.you.com/v1/agents/search",
+    );
+    expect(parsed.searchParams.get("query")).toBe("neo chat");
+    expect(parsed.searchParams.get("count")).toBe("5");
+    expect(parsed.searchParams.get("freshness")).toBe("week");
+    expect(init.method).toBe("GET");
+    expect(init.headers).toMatchObject({
+      "User-Agent": "youdotcom-integration/u14app-neo-chat",
+    });
+    expect(init.headers).not.toHaveProperty("X-API-Key");
+    expect(result.sources).toEqual([
+      {
+        title: "Neo",
+        url: "https://example.com/neo",
+        content: "Neo description\n\nfirst snippet",
+      },
+      {
+        title: "News",
+        url: "https://example.com/news",
+        content: "News description",
+      },
+    ]);
+    expect(result.images).toEqual([
+      {
+        url: "https://example.com/neo.png",
+        description: "Neo",
+        sourceUrl: "https://example.com/neo",
+      },
+    ]);
+  });
+
+  it("uses the keyed endpoint with X-API-Key when a key is set", async () => {
+    const fetchJson = vi.fn().mockResolvedValue({
+      response: new Response(null, { status: 200 }),
+      data: youResponse,
+    });
+
+    await runSearchProvider({
+      provider: "youcom",
+      query: "neo chat",
+      apiKey: "ydc-key",
+      maxResultNumber: 3,
+      fetchJson,
+    });
+
+    const [url, init] = fetchJson.mock.calls[0]!;
+    expect(url).toBe("https://ydc-index.io/v1/search");
+    expect(init.method).toBe("POST");
+    expect(init.headers).toMatchObject({
+      "X-API-Key": "ydc-key",
+      "User-Agent": "youdotcom-integration/u14app-neo-chat",
+    });
+    expect(init.headers).not.toHaveProperty("Authorization");
+    expect(JSON.parse(init.body as string)).toEqual({
+      query: "neo chat",
+      count: 3,
+    });
+  });
+
+  it.each([
+    [401, "You.com keyless search is unavailable"],
+    [403, "You.com keyless search is unavailable"],
+    [402, "You.com API credits are exhausted"],
+    [429, "You.com keyless search limit reached"],
+  ])("maps HTTP %i to a provider error", async (status, message) => {
+    const fetchJson = vi.fn().mockResolvedValue({
+      response: new Response(null, {
+        status,
+        headers: { "Retry-After": "30" },
+      }),
+      data: {},
+    });
+
+    const error = await runSearchProvider({
+      provider: "youcom",
+      query: "neo",
+      maxResultNumber: 1,
+      fetchJson,
+    }).catch((e) => e);
+
+    expect(error.name).toBe("SearchProviderError");
+    expect(error.status).toBe(status);
+    expect(error.message).toContain(message);
+    expect(error.retryAfterMs).toBe(30_000);
+    if (status === 429) expect(error.code).toBe("SEARCH_RATE_LIMITED");
+  });
+});

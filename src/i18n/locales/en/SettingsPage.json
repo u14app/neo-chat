@@ -30,7 +30,7 @@
   "searchDescription_about": "View application version, project information, and links.",
   "searchKeywords_providers": "provider api key base url model capability attachment tools image reasoning",
   "searchKeywords_defaults": "default title related questions compression prompt optimization rag memory model",
-  "searchKeywords_search": "search firecrawl tavily exa bocha searxng results time range",
+  "searchKeywords_search": "search firecrawl tavily exa bocha youcom searxng results time range",
   "searchKeywords_rag": "knowledge vector parser mineru llamaparse chunks top k token",
   "searchKeywords_voice": "voice speech audio transcription elevenlabs mimo",
   "searchKeywords_memory": "memory dream automatic record tags",

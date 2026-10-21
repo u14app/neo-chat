@@ -170,7 +170,7 @@ function searchHealth(): ServiceHealthItem {
       ? item("search", "available", "SEARCH_CONFIGURED")
       : item("search", "missing_key", "SEARCH_BASE_URL_MISSING");
   }
-  if (provider === "firecrawl") {
+  if (provider === "firecrawl" || provider === "youcom") {
     return item("search", "available", "SEARCH_CONFIGURED");
   }
   return env("DEFAULT_SEARCH_API_KEY")

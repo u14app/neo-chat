@@ -560,6 +560,7 @@ export const SearchRequestSchema = z
       "firecrawl",
       "exa",
       "bocha",
+      "youcom",
       "searxng",
     ]),
     query: z.string().min(1).max(4_000),

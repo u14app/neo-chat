@@ -22,6 +22,8 @@ const TAVILY_KEY_URL = "https://app.tavily.com/";
 const EXA_KEY_URL = "https://dashboard.exa.ai/api-keys";
 const FIRECRAWL_KEY_URL = "https://www.firecrawl.dev/app";
 const BOCHA_KEY_URL = "https://open.bochaai.com/";
+const YOUCOM_KEY_URL =
+  "https://you.com/platform?utm_source=u14app-neo-chat&utm_medium=oss_integration&utm_campaign=2026-10-oss-integrations&utm_content=sample";
 
 const SearchSettings = () => {
   const t = useTranslations("Search");
@@ -164,6 +166,19 @@ const SearchSettings = () => {
             apiKeyMaxLength={SEARCH_CONFIG_LIMITS.maxApiKeyChars}
             baseUrlMaxLength={SEARCH_CONFIG_LIMITS.maxBaseUrlChars}
             apiKeyHelpUrl={BOCHA_KEY_URL}
+          />
+          <SearchProviderItem
+            id="youcom"
+            name="You.com"
+            icon={<Globe size={18} />}
+            description={t("youcomDesc")}
+            isActive={search.provider === "youcom"}
+            onActivate={() => setSearchProvider("youcom")}
+            hasBaseUrl={false}
+            config={search.configs["youcom"]}
+            onUpdateConfig={(c) => updateSearchConfig("youcom", c)}
+            apiKeyMaxLength={SEARCH_CONFIG_LIMITS.maxApiKeyChars}
+            apiKeyHelpUrl={YOUCOM_KEY_URL}
           />
           <SearchProviderItem
             id="searxng"

@@ -30,7 +30,7 @@
   "searchDescription_about": "查看应用版本、项目信息和相关链接。",
   "searchKeywords_providers": "供应商 API 密钥 Base URL 模型 能力 附件 工具 图片 推理",
   "searchKeywords_defaults": "默认 标题 相关问题 压缩 提示词优化 RAG 记忆 模型",
-  "searchKeywords_search": "搜索 Firecrawl Tavily Exa Bocha SearXNG 结果 时间范围",
+  "searchKeywords_search": "搜索 Firecrawl Tavily Exa Bocha You.com SearXNG 结果 时间范围",
   "searchKeywords_rag": "知识库 向量 解析 MinerU LlamaParse 分块 Top K Token",
   "searchKeywords_voice": "语音 朗读 音频 转写 ElevenLabs Mimo",
   "searchKeywords_memory": "记忆 梦境 自动记录 标签",

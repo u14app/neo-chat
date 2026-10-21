@@ -30,7 +30,7 @@
   "searchDescription_about": "アプリのバージョン、プロジェクト情報、リンクを確認します。",
   "searchKeywords_providers": "プロバイダー API キー Base URL モデル 機能 添付 ツール 画像 推論",
   "searchKeywords_defaults": "デフォルト タイトル 関連質問 圧縮 プロンプト最適化 RAG メモリ モデル",
-  "searchKeywords_search": "検索 Firecrawl Tavily Exa Bocha SearXNG 結果 期間",
+  "searchKeywords_search": "検索 Firecrawl Tavily Exa Bocha You.com SearXNG 結果 期間",
   "searchKeywords_rag": "ナレッジ ベクトル パーサー MinerU LlamaParse チャンク Top K トークン",
   "searchKeywords_voice": "音声 読み上げ オーディオ 文字起こし ElevenLabs Mimo",
   "searchKeywords_memory": "メモリ ドリーム 自動記録 タグ",

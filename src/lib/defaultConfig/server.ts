@@ -67,6 +67,7 @@ const SEARCH_PROVIDERS = new Set<ConfigurableSearchProvider>([
   "firecrawl",
   "exa",
   "bocha",
+  "youcom",
   "searxng",
 ]);
 
@@ -341,7 +342,7 @@ export function getDefaultSearchRuntimeConfig(): {
   }
 
   const apiKey = env("DEFAULT_SEARCH_API_KEY");
-  if (typedProvider === "firecrawl") {
+  if (typedProvider === "firecrawl" || typedProvider === "youcom") {
     return {
       provider: typedProvider,
       ...(apiKey
