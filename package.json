@@ -52,7 +52,7 @@
     "lucide-react": "1.53.0",
     "mermaid": "^11.17.2",
     "next": "^16.3.8",
-    "next-intl": "^4.14.1",
+    "next-intl": "^4.14.9",
     "openai": "^7.5.0",
     "opfs-tools": "^0.7.4",
     "qrcode": "^1.5.4",
