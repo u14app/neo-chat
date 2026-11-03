@@ -66,6 +66,7 @@ const SEARCH_PROVIDERS = new Set<ConfigurableSearchProvider>([
   "tavily",
   "firecrawl",
   "exa",
+  "keenable",
   "bocha",
   "searxng",
 ]);
