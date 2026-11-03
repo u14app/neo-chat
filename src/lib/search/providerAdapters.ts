@@ -302,6 +302,50 @@ export async function runSearchProvider({
     };
   }
 
+  if (provider === "keenable") {
+    // Keyed requests use /v1/search; without a key fall back to the free public endpoint.
+    const keenableHeaders: Record<string, string> = {
+      "Content-Type": "application/json",
+      "X-Keenable-Title": "NeoChat",
+    };
+    if (apiKey) keenableHeaders["X-API-Key"] = apiKey;
+
+    const endpoint = new URL(
+      apiKey ? "/v1/search" : "/v1/search/public",
+      baseUrl || "https://api.keenable.ai",
+    ).toString();
+    const { response, data } = await fetchJson<any>(
+      endpoint,
+      {
+        method: "POST",
+        headers: keenableHeaders,
+        body: JSON.stringify({ query, max_results: maxResultNumber }),
+        signal,
+      },
+      fetchOptions,
+    );
+
+    assertSearchResponseOk(response, "Keenable search failed");
+    const results = Array.isArray(data?.results) ? data.results : [];
+
+    return {
+      sources: results
+        .map((result: any) => {
+          const snippet =
+            typeof result.snippet === "string" ? result.snippet : "";
+          return {
+            content:
+              result.description ||
+              (snippet.length > 2000 ? `${snippet.slice(0, 2000)}…` : snippet),
+            url: result.url,
+            title: result.title,
+          };
+        })
+        .filter((item: any) => item.content && item.url),
+      images: [],
+    };
+  }
+
   if (provider === "bocha") {
     const endpoint = new URL(
       "/v1/web-search",

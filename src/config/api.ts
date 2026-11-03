@@ -69,6 +69,7 @@ export const SEARCH_SERVICE_URLS = {
   tavily: "https://api.tavily.com",
   firecrawl: "https://api.firecrawl.dev",
   exa: "https://api.exa.ai",
+  keenable: "https://api.keenable.ai",
   bocha: "https://api.bochaai.com",
   searxng: "http://localhost:8080",
 } as const;

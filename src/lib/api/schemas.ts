@@ -559,6 +559,7 @@ export const SearchRequestSchema = z
       "tavily",
       "firecrawl",
       "exa",
+      "keenable",
       "bocha",
       "searxng",
     ]),

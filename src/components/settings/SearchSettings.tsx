@@ -16,10 +16,12 @@ import { SEARCH_CONFIG_LIMITS } from "@/config/limits";
 const TAVILY_BASE_URL = "https://api.tavily.com";
 const FIRECRAWL_BASE_URL = "https://api.firecrawl.dev";
 const EXA_BASE_URL = "https://api.exa.ai";
+const KEENABLE_BASE_URL = "https://api.keenable.ai";
 const BOCHA_BASE_URL = "https://api.bochaai.com";
 const SEARXNG_BASE_URL = "http://localhost:8080";
 const TAVILY_KEY_URL = "https://app.tavily.com/";
 const EXA_KEY_URL = "https://dashboard.exa.ai/api-keys";
+const KEENABLE_KEY_URL = "https://keenable.ai/";
 const FIRECRAWL_KEY_URL = "https://www.firecrawl.dev/app";
 const BOCHA_KEY_URL = "https://open.bochaai.com/";
 
@@ -138,6 +140,19 @@ const SearchSettings = () => {
             apiKeyMaxLength={SEARCH_CONFIG_LIMITS.maxApiKeyChars}
             baseUrlMaxLength={SEARCH_CONFIG_LIMITS.maxBaseUrlChars}
             apiKeyHelpUrl={EXA_KEY_URL}
+          />
+          <SearchProviderItem
+            id="keenable"
+            name="Keenable"
+            icon={<Globe size={18} />}
+            isActive={search.provider === "keenable"}
+            onActivate={() => setSearchProvider("keenable")}
+            defaultBaseUrl={KEENABLE_BASE_URL}
+            config={search.configs["keenable"]}
+            onUpdateConfig={(c) => updateSearchConfig("keenable", c)}
+            apiKeyMaxLength={SEARCH_CONFIG_LIMITS.maxApiKeyChars}
+            baseUrlMaxLength={SEARCH_CONFIG_LIMITS.maxBaseUrlChars}
+            apiKeyHelpUrl={KEENABLE_KEY_URL}
           />
           <SearchProviderItem
             id="firecrawl"

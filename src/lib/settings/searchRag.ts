@@ -17,6 +17,7 @@ const SEARCH_PROVIDERS = [
   "tavily",
   "firecrawl",
   "exa",
+  "keenable",
   "bocha",
   "searxng",
 ] as const satisfies readonly SearchProviderID[];
@@ -25,6 +26,7 @@ const CONFIGURABLE_SEARCH_PROVIDERS = [
   "tavily",
   "firecrawl",
   "exa",
+  "keenable",
   "bocha",
   "searxng",
 ] as const satisfies readonly Exclude<SearchProviderID, "default" | "google">[];
@@ -141,6 +143,8 @@ export const getSearchProviderLabel = (provider: SearchProviderID): string => {
       return "Firecrawl";
     case "exa":
       return "Exa";
+    case "keenable":
+      return "Keenable";
     case "bocha":
       return "Bocha";
     case "searxng":
@@ -404,6 +408,7 @@ export const normalizeSearchSettings = (
         rawSearch.configs?.firecrawl,
       )!,
       exa: normalizeSearchConfig("exa", rawSearch.configs?.exa)!,
+      keenable: normalizeSearchConfig("keenable", rawSearch.configs?.keenable)!,
       bocha: normalizeSearchConfig("bocha", rawSearch.configs?.bocha)!,
       searxng: normalizeSearchConfig("searxng", rawSearch.configs?.searxng)!,
     },

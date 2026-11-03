@@ -673,6 +673,7 @@ export const useSettingsStore = create<SettingsState>()(
           tavily: { apiKey: "" },
           firecrawl: { apiKey: "" },
           exa: { apiKey: "" },
+          keenable: { apiKey: "" },
           bocha: { apiKey: "" },
           searxng: { baseUrl: "http://localhost:8080" },
         },

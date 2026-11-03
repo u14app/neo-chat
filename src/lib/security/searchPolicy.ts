@@ -1,7 +1,7 @@
 import { getSafeUrlPolicy } from "./urlPolicy";
 
 export type SearchProvider =
-  "tavily" | "firecrawl" | "exa" | "bocha" | "searxng";
+  "tavily" | "firecrawl" | "exa" | "keenable" | "bocha" | "searxng";
 
 export function getSearchProviderPolicy(provider: SearchProvider) {
   void provider;
